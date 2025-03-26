@@ -1,12 +1,13 @@
 <?php
-    $db_server = "<endpoint>";
-    $db_user = "<master user>";
-    $db_password = "password";
-    $db_name = "dbname of rds";
+    $db_server = "chronosatelierdb.c18c2qg08jbh.ap-southeast-1.rds.amazonaws.com";
+    $db_user = "cardsadmin";
+    $db_password = "Chronosatelierdb2024";
+    $db_name = "chronosatelierdb";
+
 
     try {
         $conn = new mysqli($db_server, $db_user, $db_password, $db_name);
-
+        echo "Connected successfully";
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
