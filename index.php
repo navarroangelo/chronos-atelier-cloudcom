@@ -1,4 +1,5 @@
 <?php
+include 'database.php';  // Include the database connection file
 ?>
 
 <!DOCTYPE html>
