@@ -1,0 +1,293 @@
+/* General Styles */
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #111827;
+    height: 7rem;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Navbar container for centering */
+.navbar__container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+/* Logo centered */
+.navbar__logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar__logo img {
+    max-height: 100px;
+}
+
+/* Menu items */
+.navbar__menu {
+    display: flex;
+    gap: 2rem;
+}
+
+.navbar__list {
+    display: flex;
+    gap: 2rem;
+    
+}
+
+.navbar__list li {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.navbar__list a {
+    font-family: "Poppins", sans-serif;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.navbar__list a:hover {
+    color: #777;
+}
+
+/* Right side links */
+.navbar__right {
+    display: flex;
+    gap: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.navbar__right a {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.navbar__right a:hover {
+    color: #777;
+}
+
+
+/* Hero Section Styles */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    overflow: hidden;
+}
+
+.hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+    z-index: 1; /* Ensure it appears above the image */
+}
+
+.hero__content {
+    position: absolute;
+    bottom: 20%;
+    left: 10%;
+    color: #ffffff;
+    z-index: 2; /* Ensure it appears above the overlay */
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.hero__content h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.hero__content p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0 0;
+}
+
+.catalogue {
+    padding: 4rem 2rem;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.catalogue__title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.catalogue__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.watch-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.watch-card:hover {
+    transform: translateY(-5px);
+}
+
+.watch-card img {
+    width: 100%;
+    height: auto;
+}
+
+.watch-card__info {
+    padding: 1rem;
+}
+
+.watch-card__price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.watch-card__btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    background: #111827;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.watch-card__btn:hover {
+    background: #444;
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+}
+
+.modal__content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal__close {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.modal__body {
+    display: flex;
+    gap: 20px;
+}
+
+.modal__image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.modal__image-container img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 10px;
+}
+
+.modal__details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal__details h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.modal__details p {
+    font-size: 16px;
+    margin: 0;
+}
+
+.modal__btn {
+    padding: 10px 20px;
+    background-color: #f4a261;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    align-self: flex-start;
+}
+
+.modal__btn:hover {
+    background-color: #e76f51;
+}
