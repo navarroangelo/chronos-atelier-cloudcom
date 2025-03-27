@@ -22,3 +22,37 @@
             closeModal();
         }
     }
+
+
+    function filterWatchesByName() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const watchCards = document.querySelectorAll('.watch-card');
+    
+        watchCards.forEach(card => {
+            const watchName = card.getAttribute('data-name').toLowerCase();
+            if (watchName.includes(input)) {
+                card.style.display = 'block'; // Show the card if it matches the search
+            } else {
+                card.style.display = 'none'; // Hide the card if it doesn't match
+            }
+        });
+    }
+    
+    function clearSearch() {
+        const watchCards = document.querySelectorAll('.watch-card');
+        document.getElementById('searchInput').value = ''; // Clear the input field
+    
+        watchCards.forEach(card => {
+            card.style.display = 'block'; // Show all cards
+        });
+    }
+
+    const brandTrack = document.querySelector('.brand-scroller__track');
+
+brandTrack.addEventListener('mouseover', () => {
+    brandTrack.style.animationPlayState = 'paused';
+});
+
+brandTrack.addEventListener('mouseout', () => {
+    brandTrack.style.animationPlayState = 'running';
+});
