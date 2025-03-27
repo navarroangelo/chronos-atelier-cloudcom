@@ -1,5 +1,7 @@
 <?php
-include 'database.php';  // Include the database
+include './database.php';
+
+$sql = "SELECT * FROM watches";
 ?>
 
 <!DOCTYPE html>
