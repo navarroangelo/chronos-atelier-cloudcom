@@ -2,7 +2,7 @@
     $db_server = "chronosatelierdb.c18c2qg08jbh.ap-southeast-1.rds.amazonaws.com";
     $db_user = "cardsadmin";
     $db_password = "Chronosatelierdb2024";
-    $db_name = "chronosatelierdb";
+    $db_name = "chronos_atelier";
 
 
     try {

@@ -79,34 +79,6 @@ $sql = "SELECT * FROM watches";
 </div>
     
     <div class="catalogue__grid">
-        <?php
-        // Sample watch data array
-        $watches = [
-            ["image" => "src/assets/images/1.webp", "name" => "Rolex Daytona 40", "price" => "₱2,980,000.00"],
-            ["image" => "src/assets/images/2.webp", "name" => "Santos De Cartier", "price" => "₱498,000.00"],
-            ["image" => "src/assets/images/3.webp", "name" => "Santos Dumont Rose Gold", "price" => "₱438,000.00"],
-            ["image" => "src/assets/images/4.webp", "name" => "Rolex Yachtmaster", "price" => "₱2,780,000.00"],
-            ["image" => "src/assets/images/5.webp", "name" => "Rolex Submariner", "price" => "₱1,980,000.00"],
-            ["image" => "src/assets/images/6.webp", "name" => "Rolex Datejust", "price" => "₱1,780,000.00"],
-            ["image" => "src/assets/images/7.webp", "name" => "Rolex Oyster Perpetual", "price" => "₱1,380,000.00"],
-            ["image" => "src/assets/images/8.webp", "name" => "Rolex Explorer", "price" => "₱1,980,000.00"],
-            ["image" => "src/assets/images/9.webp", "name" => "Rolex GMT Master II", "price" => "₱2,380,000.00"],
-            ["image" => "src/assets/images/10.webp", "name" => "Rolex Sky Dweller", "price" => "₱3,280,000.00"],
-        ];
-
-        // Loop through watches and display cards
-        foreach ($watches as $watch) {
-            echo '
-            <div class="watch-card" data-name="'.$watch["name"].'">
-                <img src="'.$watch["image"].'" alt="'.$watch["name"].'">
-                <div class="watch-card__info">
-                    <h3>'.$watch["name"].'</h3>
-                    <p class="watch-card__price">'.$watch["price"].'</p>
-                    <button class="watch-card__btn" onclick="openModal(\''.$watch["name"].'\', \''.$watch["image"].'\', \''.$watch["price"].'\')">View Details</button>
-                </div>
-            </div>';
-        }        
-        ?>
     </div>
 </section>
 
