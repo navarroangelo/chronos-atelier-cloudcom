@@ -8,6 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chronos Atelier</title>
+    <link rel="stylesheet" href="src/assets/style/navbar-styles.css">
+    <link rel="stylesheet" href="src/assets/style/footer-styles.css">
     <link rel="stylesheet" href="src/assets/style/catalog-styles.css">
 </head>
 <body>
@@ -59,27 +61,27 @@
     </div>
 </section>
 
-<!-- Modal for displaying watch details -->
-<div id="watchModal" class="modal">
-    <div class="modal__content">
-        <span class="modal__close" onclick="closeModal()">&times;</span>
-        <div class="modal__body">
-            <div class="modal__image-container">
-                <img id="modalImage" src="" alt="Watch Image">
-            </div>
-            <div class="modal__details">
-                <h2 id="modalTitle">Watch Title</h2>
-                <p id="modalPrice"></p>
-                <p id="modalDescription">A luxury watch with timeless design and exceptional craftsmanship.</p>
-                <button class="modal__btn">Buy Now</button>
+    <!-- Modal for displaying watch details -->
+    <div id="watchModal" class="modal">
+        <div class="modal__content">
+            <span class="modal__close" onclick="closeModal()">&times;</span>
+            <div class="modal__body">
+                <div class="modal__image-container">
+                    <img id="modalImage" src="" alt="Watch Image">
+                </div>
+                <div class="modal__details">
+                    <h2 id="modalTitle">Watch Title</h2>
+                    <p id="modalPrice"></p>
+                    <p id="modalDescription">A luxury watch with timeless design and exceptional craftsmanship.</p>
+                    <button class="modal__btn">Buy Now</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<script src="scripts/script.js"></script>
-
+    <script src="scripts/script.js"></script>
+    <?php include 'footer.php'; ?>
 
 </body>
 </html>

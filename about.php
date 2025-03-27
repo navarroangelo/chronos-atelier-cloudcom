@@ -8,7 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chronos Atelier</title>
-    <link rel="stylesheet" href="src/assets/style/index-styles.css">
+    <link rel="stylesheet" href="src/assets/style/navbar-styles.css">
+    <link rel="stylesheet" href="src/assets/style/footer-styles.css">
+    <link rel="stylesheet" href="src/assets/style/catalog-styles.css">
 </head>
 <body>
 
@@ -23,6 +25,9 @@
             <p>Watch Highlight</p>
         </div>
     </section>
+
+    <script src="scripts/script.js"></script>
+    <?php include 'footer.php'; ?>
 
 </body>
 </html>

@@ -3,7 +3,7 @@
     <div class="navbar__container">
         <!-- Logo -->
         <a href="index.php" class="navbar__logo">
-            <img src="images/LOGONOBG.webp" alt="Logo of Chronos Atelier">
+            <img src="src/assets/images/LOGONOBG.webp" alt="Logo of Chronos Atelier">
         </a>
 
         <!-- Navigation Links -->

@@ -1,5 +1,5 @@
 <?php
-include 'database.php';  // Include the database connection file
+
 ?>
 
 <!DOCTYPE html>
@@ -8,6 +8,8 @@ include 'database.php';  // Include the database connection file
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chronos Atelier</title>
+    <link rel="stylesheet" href="src/assets/style/navbar-styles.css">
+    <link rel="stylesheet" href="src/assets/style/footer-styles.css">
     <link rel="stylesheet" href="src/assets/style/index-styles.css">
 </head>
 <body>
@@ -79,7 +81,7 @@ include 'database.php';  // Include the database connection file
     <section class="contact-cta">
         <div class="contact-cta__container">
             <div class="contact-cta__image">
-                <img src="src/assets/images/contact.webp" alt="Contact Chronos Atelier">
+                <img src="src/assets/images/LOGONOBG.webp" alt="Contact Chronos Atelier">
             </div>
             <div class="contact-cta__content">
                 <h2>Get in Touch with Us</h2>
@@ -89,6 +91,7 @@ include 'database.php';  // Include the database connection file
         </div>
     </section>
 
+    <?php include 'footer.php'; ?>
 
 
 </body>
