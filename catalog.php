@@ -1,5 +1,5 @@
 <?php
-// catalog.php
+include 'database.php';// catalog.php
 ?>
 
 <!DOCTYPE html>
@@ -30,9 +30,9 @@
     <h2 class="catalogue__title">Our Watch Collection</h2>
     
     <div class="catalogue__grid">
-        <?php
-        // Sample watch data array
-        $watches = [
+   
+       
+        <!-- $watches = [
             ["image" => "src/assets/images/1.webp", "name" => "Rolex Daytona 40", "price" => "₱2,980,000.00"],
             ["image" => "src/assets/images/2.webp", "name" => "Santos De Cartier", "price" => "₱498,000.00"],
             ["image" => "src/assets/images/3.webp", "name" => "Santos Dumont Rose Gold", "price" => "₱438,000.00"],
@@ -45,7 +45,7 @@
             ["image" => "src/assets/images/10.webp", "name" => "Rolex Sky Dweller", "price" => "₱3,280,000.00"],
         ];
 
-        // Loop through watches and display cards
+   
         foreach ($watches as $watch) {
             echo '
             <div class="watch-card">
@@ -56,8 +56,8 @@
                     <button class="watch-card__btn" onclick="openModal(\''.$watch["name"].'\', \''.$watch["image"].'\', \''.$watch["price"].'\')">View Details</button>
                 </div>
             </div>';
-        }
-        ?>
+        } -->
+       
     </div>
 </section>
 
