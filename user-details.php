@@ -1,100 +1,85 @@
 <?php
+
+
 function getUserDetails() {
-    $ip_address = getUserIP();
-    $os_version = getOS();
-    $browser = getBrowser();
-    $processor = getProcessor();
-    $location = getLocationFromIP($ip_address);
-    return [$ip_address, $os_version, $browser, $processor, $location];
-}
-
-function getUserIP() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        return $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        return $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
-        $ip = $_SERVER['REMOTE_ADDR'];
-        if ($ip === "::1" || $ip === "127.0.0.1") {
-            $external_ip = @file_get_contents("https://api64.ipify.org?format=json");
-            if ($external_ip) {
-                $external_ip = json_decode($external_ip, true);
-                return $external_ip['ip'] ?? "Unknown IP";
-            }
-        }
-        return $ip;
+    // Get Real IP Address
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip_list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $ip_address = trim($ip_list[0]); // Get the first valid IP
+    } else {
+        $ip_address = $_SERVER['REMOTE_ADDR'];
     }
-    return "Unknown IP";
-}
 
-function getOS() {
     $user_agent = $_SERVER['HTTP_USER_AGENT'];
-    if (preg_match('/windows/i', $user_agent)) {
-        return "Windows";
+
+    // Get OS Version
+    $os_version = "Unknown OS";
+    if (preg_match('/windows|win32/i', $user_agent)) {
+        $os_version = "Windows";
     } elseif (preg_match('/macintosh|mac os x/i', $user_agent)) {
-        return "MacOS";
+        $os_version = "Mac OS";
     } elseif (preg_match('/linux/i', $user_agent)) {
-        return "Linux";
-    } elseif (preg_match('/ubuntu/i', $user_agent)) {
-        return "Ubuntu";
-    } elseif (preg_match('/iphone/i', $user_agent)) {
-        return "iOS";
+        $os_version = "Linux";
     } elseif (preg_match('/android/i', $user_agent)) {
-        return "Android";
+        $os_version = "Android";
+    } elseif (preg_match('/iphone|ipad/i', $user_agent)) {
+        $os_version = "iOS";
     }
-    return "Unknown OS";
-}
 
-function getBrowser() {
-    $user_agent = $_SERVER['HTTP_USER_AGENT'];
-    $browser = "Unknown Browser";
+    // Improved Browser Detection
     $browsers = [
-        '/brave/i'   => 'Brave Browser',
-        '/edg/i'     => 'Microsoft Edge',
-        '/chrome/i'  => 'Google Chrome',
-        '/firefox/i' => 'Mozilla Firefox',
-        '/safari/i'  => 'Safari',
-        '/opr/i'     => 'Opera'
+        'Opera GX' => '/OPR\/.*GX/i',
+        'Edge' => '/Edg/i',
+        'Brave' => '/Chrome.*Brave/i',
+        'Vivaldi' => '/Vivaldi/i',
+        'Chrome' => '/Chrome/i',
+        'Firefox' => '/Firefox/i',
+        'Safari' => '/Safari/i',
+        'Opera' => '/Opera|OPR/i',
+        'Samsung Internet' => '/SamsungBrowser/i',
+        'Internet Explorer' => '/MSIE|Trident/i'
     ];
-    foreach ($browsers as $regex => $value) {
+
+    $browser = "Unknown Browser";
+    foreach ($browsers as $name => $regex) {
         if (preg_match($regex, $user_agent)) {
-            $browser = $value;
+            $browser = $name;
             break;
         }
     }
-    return $browser;
-}
 
-function getProcessor() {
-    if (PHP_OS_FAMILY === 'Windows') {
-        $cpu = shell_exec("wmic cpu get Name");
-        if (!empty($cpu)) {
-            $cpu = explode("\n", trim($cpu));
-            return trim($cpu[1]);
-        }
-    } else {
-        $cpu = shell_exec("lscpu | grep 'Model name'");
-        if (!empty($cpu)) {
-            return trim(str_replace("Model name:", "", $cpu));
-        }
+    // Special case: Avoid detecting Chrome when it's actually Edge, Brave, or Opera GX
+    if ($browser === 'Chrome' && preg_match('/Edg/i', $user_agent)) {
+        $browser = 'Edge';
     }
-    return 'Unknown Processor';
-}
+    if ($browser === 'Chrome' && preg_match('/Brave/i', $user_agent)) {
+        $browser = 'Brave';
+    }
+    if ($browser === 'Chrome' && preg_match('/OPR/i', $user_agent)) {
+        $browser = 'Opera'; // Fallback if Opera GX wasn't detected first
+    }
 
-function getLocationFromIP($ip) {
-    if ($ip === "127.0.0.1" || $ip === "::1") {
-        return "Localhost";
-    }
-    $url = "http://ip-api.com/json/" . $ip;
-    $json = @file_get_contents($url);
-    if ($json) {
-        $data = json_decode($json, true);
-        if (!empty($data['city']) && !empty($data['country'])) {
-            return $data['city'] . ", " . $data['country'];
-        } else {
-            return "Location not found (API Limit?)";
+    // Get Processor from Form Data
+    $processor = $_POST['processor'] ?? "Unknown Processor";
+
+    // Get Location using cURL
+    $location = "Unknown";
+    $api_url = "http://ip-api.com/json/{$ip_address}?fields=city,region,country";
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $api_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $geo_data = curl_exec($ch);
+    curl_close($ch);
+
+    if ($geo_data) {
+        $geo_json = json_decode($geo_data, true);
+        if (isset($geo_json['city'], $geo_json['region'], $geo_json['country'])) {
+            $location = "{$geo_json['city']}, {$geo_json['region']}, {$geo_json['country']}";
         }
     }
-    return "Unknown Location";
+
+    return [$ip_address, $os_version, $browser, $processor, $location,$user_agent];
 }
 ?>

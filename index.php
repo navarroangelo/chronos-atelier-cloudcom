@@ -1,5 +1,9 @@
 <?php
-
+// // Check if user is logged in, if not, redirect to login
+// if (!isset($_SESSION['username'])) {
+//     header('Location: login.php');
+//     exit(); // Ensure that the script stops executing after redirection
+// }
 ?>
 
 <!DOCTYPE html>
