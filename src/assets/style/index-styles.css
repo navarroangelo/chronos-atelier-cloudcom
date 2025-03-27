@@ -27,9 +27,13 @@ ul {
 }
 
 .hero__image {
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     object-fit: cover;
+    z-index: -1;
 }
 
 .hero__overlay {
@@ -52,6 +56,7 @@ ul {
 }
 
 .hero__content h1 {
+    font-family: 'Montserrat', sans-serif;
     font-size: 3rem;
     margin: 0;
 }
@@ -159,7 +164,10 @@ ul {
 
 /* Contact CTA Section */
 .contact-cta {
-    background-color: #111827;
+    background-color: none;
+    background: scroll;
+    background: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+    z-index: 1; /* Ensure it appears above the image */
     color: #ffffff;
     padding: 5rem 2rem;
 }

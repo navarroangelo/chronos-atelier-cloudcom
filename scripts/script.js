@@ -1,17 +1,16 @@
-
-    // Function to open the modal
-    function openModal(name, image, price) {
-        document.getElementById('watchModal').style.display = 'flex';
-        document.getElementById('modalTitle').innerText = name;
+    function openModal(name, image, price, description, brand, year) {
+        document.getElementById('modalTitle').textContent = name;
         document.getElementById('modalImage').src = image;
-        document.getElementById('modalPrice').innerText = price;
+        document.getElementById('modalPrice').textContent = `Price: ₱${parseFloat(price).toLocaleString()}`;
+        document.getElementById('modalBrand').textContent = `Brand: ${brand}`;
+        document.getElementById('modalYear').textContent = `Year: ${year}`;
         document.getElementById('modalDescription').textContent = description;
+
 
         // Display the modal
         document.getElementById('watchModal').style.display = 'block';
     }
 
-    // Function to close the modal
     function closeModal() {
         document.getElementById('watchModal').style.display = 'none';
     }
@@ -24,13 +23,15 @@
     }
 
 
-    function filterWatchesByName() {
+    function filterWatches() {
         const input = document.getElementById('searchInput').value.toLowerCase();
         const watchCards = document.querySelectorAll('.watch-card');
     
         watchCards.forEach(card => {
             const watchName = card.getAttribute('data-name').toLowerCase();
-            if (watchName.includes(input)) {
+            const watchBrand = card.querySelector('.watch-card__brand').textContent.toLowerCase();
+    
+            if (watchName.includes(input) || watchBrand.includes(input)) {
                 card.style.display = 'block'; // Show the card if it matches the search
             } else {
                 card.style.display = 'none'; // Hide the card if it doesn't match

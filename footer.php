@@ -1,3 +1,13 @@
+<?php
+?>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts - Cinzel & Open Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+</html>
 <footer class="footer">
     <div class="footer-container">
         <!-- Opening Sentence -->
@@ -13,7 +23,7 @@
             </div>
 
             <!-- Column 2: Quick Links -->
-            <div class="footer-column">
+            <div class="footer-column">  
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="catalog.php">HOME</a></li>
@@ -27,10 +37,15 @@
             <!-- Column 3: Contact Info -->
             <div class="footer-column">
                 <h3>Contact Us</h3>
-                <p>Email: support@chronosatelier.com</p>
-                <p>Phone: +1 (234) 567-8901</p>
-                <p>Location: 123 Luxury Lane, Time City</p>
+                <p>Email: supportchronosatelier@gmail.com</p>
+                <p>Phone: +63 9543059646</p>
+                <p>Location: Holy Angel Avenue, Sto. Rosario, Angeles City, Pampanga 2009</p>
+                <div class="social-link">
+                    <a href="https://www.facebook.com/profile.php?id=61572737490815" target="_blank">
+                    <i class="fab fa-facebook-f"></i> Follow us on Facebook</a>
+                </div>
             </div>
         </div>
     </div>
 </footer>
+</html>

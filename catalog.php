@@ -1,7 +1,5 @@
 <?php
-include './database.php';
-
-$sql = "SELECT * FROM watches";
+include 'database.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -11,23 +9,25 @@ $sql = "SELECT * FROM watches";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chronos Atelier</title>
     <link rel="stylesheet" href="src/assets/style/navbar-styles.css">
-    <link rel="stylesheet" href="src/assets/style/footer-styles.css">
+    <link rel="stylesheet" href="src/assets/style/footer-styles.css?v=">
     <link rel="stylesheet" href="src/assets/style/catalog-styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-    <?php include 'navbar.php'; ?>  <!-- Include the navbar -->
+    <?php include 'navbar.php'; ?>
 
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero__overlay"></div> <!-- Overlay -->
-        <img src="src/assets/images/hero-home.webp" alt="Hero Watch" class="hero__image">
-        <div class="hero__content">
-            <h1>Rolex Daytona 40 Full Rose Gold Sundust</h1>
-            <p>Watch Highlight</p>
-        </div>
-    </section>
+    <div class="hero__overlay"></div> <!-- Overlay -->
+    <video autoplay muted loop class="hero__video">
+        <source src="src/assets/images/catalog-vid.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="hero__content">
+        <h1>Explore our Collection</h1>
+        <p>Catalog</p>
+    </div>
+</section>
 
 
     <section class="brand-scroller">
@@ -63,26 +63,51 @@ $sql = "SELECT * FROM watches";
     </section>
 
     <section class="catalogue">
-    <h2 class="catalogue__title">Our Watch Collection</h2>
-
-    <!-- Search Input -->
-    <div class="catalogue__search">
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for a watch...">
-        <button id="searchButton" onclick="filterWatchesByName()">
-            <i class="fas fa-search"></i> <!-- Font Awesome search icon -->
-        </button>
-        <button id="clearButton" onclick="clearSearch()">
-            <i class="fas fa-times"></i> <!-- Font Awesome clear icon -->
-        </button>
+        <h2 class="catalogue__title">Our Watch Collection</h2>
+        <div class="catalogue__search">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by name or brand...">
+            <i class="fas fa-search search-icon" onclick="filterWatches()"></i> <!-- Search icon -->
+            <i class="fas fa-times clear-icon" onclick="clearSearch()"></i> <!-- Clear icon -->
+        </div>
     </div>
-</div>
+        <div class="catalogue__grid">
+            <?php
+            // Fetch data from the database
+            $sql = "SELECT watch_name, watch_brand, watch_price, watch_year, watch_description, watch_image FROM watches";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                // Loop through the results and display each watch
+                while ($row = $result->fetch_assoc()) {
+                    echo '
+                    <div class="watch-card" data-name="' . $row["watch_name"] . '">
+                        <img src="' . $row["watch_image"] . '" alt="' . $row["watch_name"] . '">
+                        <div class="watch-card__info">
+                            <h3>' . $row["watch_name"] . '</h3>
+                            <p class="watch-card__brand">Brand: ' . $row["watch_brand"] . '</p>
+                            <p class="watch-card__price">₱' . number_format($row["watch_price"], 2) . '</p>
+                            <p class="watch-card__year">Year: ' . $row["watch_year"] . '</p>
+                            <button class="watch-card__btn" onclick="openModal(
+                                \'' . $row["watch_name"] . '\',
+                                \'' . $row["watch_image"] . '\',
+                                \'' . $row["watch_price"] . '\',
+                                \'' . $row["watch_description"] . '\'
+                            )">View Details</button>
+                        </div>
+                    </div>';
+                }
+            } else {
+                echo "<p>No watches found in the database.</p>";
+            }
+
+            // Close the database connection
+            $conn->close();
+            ?>
+        </div>
+    </section>
     
-    <div class="catalogue__grid">
-    </div>
-</section>
-
-<div id="watchModal" class="modal">
+    <div id="watchModal" class="modal">
     <div class="modal__content">
         <span class="modal__close" onclick="closeModal()">&times;</span>
         <div class="modal__body">
@@ -93,8 +118,10 @@ $sql = "SELECT * FROM watches";
             <!-- Details Section -->
             <div class="modal__details">
                 <h2 id="modalTitle">Watch Title</h2>
+                <p id="modalBrand"></p>
+                <p id="modalYear"></p>
                 <p id="modalPrice"></p>
-                <p id="modalDescription">A luxury watch with timeless design and exceptional craftsmanship.</p>
+                <p id="modalDescription"></p>
             </div>
         </div>
     </div>
@@ -102,9 +129,9 @@ $sql = "SELECT * FROM watches";
 
 <section class="watch-of-the-year">
     <div class="watch-of-the-year__content">
-        <img src="src/assets/images/hero-home.webp" alt="Watch of the Year" class="watch-of-the-year__image">
+        <img src="src/assets/images/watch-of-the-year.webp" alt="Watch of the Year" class="watch-of-the-year__image">
         <div class="watch-of-the-year__text">
-            <h2 class="watch-of-the-year__title">Datejust</h2>
+            <h2 class="watch-of-the-year__title">Submariner</h2>
             <p class="watch-of-the-year__subtitle">A watch for the dates to remember</p>
             <p class="watch-of-the-year__subtitle">Watch of the Year</p>
 
