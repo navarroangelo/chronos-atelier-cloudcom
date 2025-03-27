@@ -11,7 +11,7 @@
 <footer class="footer">
     <div class="footer-container">
         <!-- Opening Sentence -->
-        <p class="footer-opening">"Crafting timepieces that transcend time itself – because elegance is eternal."</p>
+        <p class="footer-opening">"Timepieces that transcend time itself – because elegance is eternal."</p>
 
         <!-- Footer Columns -->
         <div class="footer-content">

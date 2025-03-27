@@ -20,7 +20,7 @@
 
         <!-- Right Links -->
         <div class="navbar__right">
-            <a href="account.php">Account</a>
+            <a href="account.php">Account ▼</a>
         </div>
     </div>
 </header>
