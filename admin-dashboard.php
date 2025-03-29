@@ -52,10 +52,13 @@ $current_section = isset($_GET['section']) ? $_GET['section'] : 'users';
 
 // Users data
 $users = [];
-$users_query = "SELECT id, username, password,role, created_at FROM user_data";
+$users_query = "SELECT id, username, password, role, created_at FROM user_data";
 $users_result = $conn->query($users_query);
 if ($users_result) {
     while ($row = $users_result->fetch_assoc()) {
+        $created_at = new DateTime($row['created_at'], new DateTimeZone('UTC'));
+        $created_at->setTimezone(new DateTimeZone('Asia/Manila'));
+        $row['created_at'] = $created_at->format('Y-m-d H:i:s');
         $users[] = $row;
     }
 }
@@ -66,6 +69,9 @@ $logs_query = "SELECT id, username, action, action_timestamp FROM user_data WHER
 $logs_result = $conn->query($logs_query);
 if ($logs_result) {
     while ($row = $logs_result->fetch_assoc()) {
+        $action_timestamp = new DateTime($row['action_timestamp'], new DateTimeZone('UTC'));
+        $action_timestamp->setTimezone(new DateTimeZone('Asia/Manila'));
+        $row['action_timestamp'] = $action_timestamp->format('Y-m-d H:i:s');
         $audit_logs[] = $row;
     }
 }
@@ -165,7 +171,7 @@ if ($watches_result) {
                     <tr>
                         <td><?= htmlspecialchars($user['id']) ?></td>
                         <td><?= htmlspecialchars($user['username']) ?></td>
-                        <td>••••••••</td>
+                        <td><?= htmlspecialchars($user['password'])?></td>
                         <td><?= htmlspecialchars($user['role']) ?></td>
                         <td><?= htmlspecialchars($user['created_at']) ?></td>
                     </tr>

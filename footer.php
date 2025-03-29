@@ -26,9 +26,9 @@
             <div class="footer-column">  
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="catalog.php">HOME</a></li>
-                    <li><a href="mission.php">ABOUT US</a></li>
-                    <li><a href="contact.php">CATALOG</a></li>
+                    <li><a href="index.php">HOME</a></li>
+                    <li><a href="about.php">ABOUT US</a></li>
+                    <li><a href="catalog.php">CATALOG</a></li>
                     <li><a href="contact.php">CONTACT</a></li>
 
                 </ul>
@@ -42,7 +42,7 @@
                 <p>Location: Holy Angel Avenue, Sto. Rosario, Angeles City, Pampanga 2009</p>
                 <div class="social-link">
                     <a href="https://www.facebook.com/profile.php?id=61572737490815" target="_blank">
-                    <i class="fab fa-facebook-f"></i> Follow us on Facebook</a>
+                    <i class="fab fa-facebook-f"></i> Follow Us On Facebook</a>
                 </div>
             </div>
         </div>
