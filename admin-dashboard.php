@@ -14,7 +14,8 @@ $allowedOctets = [146, 155, 91];
 
 if (isValidAdminIP($adminIP, $allowedOctets) == false) {
     http_response_code(403);
-    die("Access denied: You must be connected to the VPN. Your IP: " . $adminIP);
+    header("Location: invalid.php");
+    exit();
 }
 
 if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "admin") {
