@@ -7,7 +7,9 @@ $username_error = "";
 $signup_success = false;
 $errors = [];
 
-// Handle AJAX request for username check
+
+
+
 if (isset($_GET['username_check'])) {
     $username = $_GET['username_check'];
     $stmt = $conn->prepare("SELECT * FROM user_data WHERE username = ?");
@@ -22,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"]);
     $password = $_POST["password"];
     
-    // Check if username is taken
+   
     $stmt = $conn->prepare("SELECT * FROM user_data WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -32,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username_error = "Username already exists. Please choose another.";
     }
 
-    // Password validation
+
     if (strlen($password) < 8) {
         $errors[] = "Password must be at least 8 characters long.";
     }
@@ -47,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($errors) && empty($username_error)) {
-        // Get user details
+    
         list($ip_address, $os_version, $browser, $processor, $location ,$user_agent) = getUserDetails();
         
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
@@ -78,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="signup-container">
         <div class="brand-header">
-            <h1>SIGN-UP TO </h1>
+            <h1>SIGN-UP</h1>
             <h2>CHRONOS ATELIER</h2>
             <p>Create Your Account</p>
         </div>
@@ -87,11 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="message success">
                 Signup successful! Redirecting to login...
             </div>
-            <script>
-                setTimeout(function() {
-                    window.location.href = 'login.php';
-                }, 2000);
-            </script>
         <?php else: ?>
             <form class="signup-form" id="signupForm" action="" method="POST">
                 <div class="form-group">
@@ -108,12 +105,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <input type="hidden" id="processorInput" name="processor" />
                 <button type="submit">Sign Up</button>
+
+                <div class="signup-link">
+                <p>Already have an Account? <a class="link" href="login.php">Log In Now!</a></p>
+                </div>
             </form>
         <?php endif; ?>
     </div>
 
     <script>
-        // Real-time username check with AJAX
+       
         document.getElementById("username").addEventListener("input", function() {
             const username = this.value;
             const usernameError = document.getElementById("usernameError");
@@ -133,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
 
-        // Password real-time validation
+     
         document.getElementById("password").addEventListener("input", function() {
             const password = this.value;
             const lengthError = document.getElementById("lengthError");
@@ -161,7 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
 
-        // Processor/GPU detection using WebGL
+       
         function getProcessorDetails() {
             var canvas = document.createElement('canvas');
             var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -170,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (debugInfo) {
                 var renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
                 var vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                // Return detected processor/GPU info
+
                 return `${renderer}`;
             } else {
                 return "Processor/Graphics info not available";
@@ -182,5 +183,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             document.getElementById('processorInput').value = processorDetails;
         });
     </script>
+
 </body>
 </html>

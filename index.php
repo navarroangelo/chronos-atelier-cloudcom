@@ -1,9 +1,11 @@
 <?php
-// // Check if user is logged in, if not, redirect to login
-// if (!isset($_SESSION['username'])) {
-//     header('Location: login.php');
-//     exit(); // Ensure that the script stops executing after redirection
-// }
+session_start(); 
+
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -17,12 +19,12 @@
     <link rel="stylesheet" href="src/assets/style/index-styles.css">
 </head>
 <body>
-
-    <?php include 'navbar.php'; ?>  <!-- Include the navbar -->
+        <!-- Navbar Include-->
+    <?php include 'navbar.php'; ?> 
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero__overlay"></div> <!-- Overlay -->
+        <div class="hero__overlay"></div> 
         <img src="src/assets/images/hero-home.webp" alt="Hero Watch" class="hero__image">
         <div class="hero__content">
             <h1>Rolex Daytona 40 Full Rose Gold Sundust</h1>
@@ -94,7 +96,7 @@
             </div>
         </div>
     </section>
-
+    <!-- Footer Include -->
     <?php include 'footer.php'; ?>
 
 

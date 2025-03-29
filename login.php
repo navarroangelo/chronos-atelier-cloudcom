@@ -3,46 +3,66 @@ session_start();
 include 'database.php';
 include 'user-details.php';
 
-$login_message = '';
-$message_class = '';
+$username_error = "";
+$password_error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
 
-    $stmt = $conn->prepare("SELECT * FROM user_data WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($row = $result->fetch_assoc()) {
-        // Verify hashed password
-        if (password_verify($password, $row["password"])) {
-            $_SESSION["username"] = $username;
-
-            list($ip_address, $os_version, $browser, $processor, $location) = getUserDetails();
-
-            // Update user login details
-            $stmt = $conn->prepare("UPDATE user_data SET action='login', action_timestamp=NOW(), ip_address=?, os_version=?, browser=?, processor=?, location=? WHERE username=?");
-            $stmt->bind_param("ssssss", $ip_address, $os_version, $browser, $processor, $location, $username);
-            $stmt->execute();
-
-            // Redirect to index.php after successful login
-            header("Location: index.php");
-            exit();
-        } else {
-            $login_message = "Invalid password.";
-            $message_class = "error";
-        }
+    if (empty($username)) {
+        $username_error = "Username is required.";
+    } elseif (empty($password)) {
+        $password_error = "Password is required.";
     } else {
-        $login_message = "User not found.";
-        $message_class = "error";
-    }
+        $stmt = $conn->prepare("SELECT id, username, password, role FROM user_data WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    $stmt->close();
+        if ($row = $result->fetch_assoc()) {
+            $user_id = $row["id"];
+            $role = $row["role"] ?? "user"; 
+
+            if (password_verify($password, $row["password"])) {
+             
+                $_SESSION["user_id"] = $user_id;
+                $_SESSION["username"] = $username;
+                $_SESSION["role"] = $role;
+
+           
+                $updateStmt = $conn->prepare("UPDATE user_data SET action = 'login', action_timestamp = NOW() WHERE id = ?");
+                if ($updateStmt) {
+                    $updateStmt->bind_param("i", $user_id);
+                    $updateStmt->execute();
+                    $updateStmt->close();
+                }
+
+                session_write_close();
+
+               
+                if ($role === "admin") {
+                    header("Location: admin-dashboard.php");
+                    exit();
+                } else {
+                    header("Location: index.php");
+                    exit();
+                }
+            } else {
+                $password_error = "Invalid password.";
+            }
+        } else {
+            $username_error = "User not found.";
+        }
+
+        $stmt->close();
+    }
     $conn->close();
 }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -52,63 +72,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login - Chronos Atelier</title>
     <link rel="stylesheet" href="src/assets/style/login-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script>
-        // Function to display error messages dynamically
-        function showError(message, type) {
-            let messageBox = document.querySelector('.message');
-            messageBox.classList.add('active');
-            messageBox.classList.remove('success', 'error');
-            messageBox.classList.add(type);
-            messageBox.innerHTML = message;
-        }
-
-        // Function to validate input as the user types
-        function validateInput() {
-            let username = document.querySelector('input[name="username"]').value;
-            let password = document.querySelector('input[name="password"]').value;
-
-            if (username && password) {
-                <?php if ($message_class == 'error') { ?>
-                    showError("<?php echo $login_message; ?>", "<?php echo $message_class; ?>");
-                <?php } ?>
-            } else {
-                document.querySelector('.message').classList.remove('active');
-            }
-        }
-
-        // Function to check username availability dynamically
-        function checkUsername() {
-            let username = document.querySelector('input[name="username"]').value;
-            
-            if (username) {
-                <?php if ($message_class == 'error' && strpos($login_message, 'User not found') !== false) { ?>
-                    showError("User not found", "error");
-                <?php } ?>
-            } else {
-                document.querySelector('.message').classList.remove('active');
-            }
-        }
-    </script>
 </head>
 <body>
-    <!-- Login Container -->
-    <div class="login-container">
-        <div class="brand-header">
-            <h1>WELCOME TO CHRONOS</h1>
-            <h2>ATELIER</h2>
-            <p>Time to Explore</p>
-        </div>
-        
-        <form class="login-form" action="" method="POST">
-            <input type="text" name="username" placeholder="Username" required onkeyup="checkUsername()">
-            <input type="password" name="password" placeholder="Password" required onkeyup="validateInput()">
-            <button type="submit">Login</button>
-        </form>
-        
-        <!-- Message display area -->
-        <div class="message">
-            <?php echo $login_message ? $login_message : ''; ?>
-        </div>
+<div class="login-container">
+    <div class="brand-header">
+        <h1>LOGIN</h1>
+        <h2>CHRONOS ATELIER</h2>
+        <p>Time to Explore</p>
     </div>
+    
+    <form class="login-form" action="" method="POST">
+        <input type="text" name="username" placeholder="Username" required value="<?php echo htmlspecialchars($username ?? ''); ?>">
+        <?php if (!empty($username_error)): ?>
+            <p class="error-message"><?php echo htmlspecialchars($username_error); ?></p>
+        <?php endif; ?>
+        
+        <input type="password" name="password" placeholder="Password" required>
+        <?php if (!empty($password_error)): ?>
+            <p class="error-message"><?php echo htmlspecialchars($password_error); ?></p>
+        <?php endif; ?>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="signup-link">
+        <p>Don't Have an Account? <a class="link" href="signup.php">Sign Up Now!</a></p>
+    </div>
+</div>
+
 </body>
 </html>

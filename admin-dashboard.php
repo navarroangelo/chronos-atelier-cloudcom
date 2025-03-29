@@ -1,18 +1,49 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 include 'database.php';
-include 'user-details.php';
 
-// Check if admin is logged in
-// if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-//     header("Location: admin-login.php");
-//     exit;
-// }
+if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "admin") {
+    header("Location: login.php");
+    exit();
+}
 
-// Handle logout
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location: admin-login.php");
+
+// Handle watch deletion
+if (isset($_POST['delete_watch'])) {
+    $watch_id = $_POST['watch_id'];
+    $delete_query = "DELETE FROM watches WHERE watch_id = ?";
+    $stmt = $conn->prepare($delete_query);
+    $stmt->bind_param("i", $watch_id);
+    if ($stmt->execute()) {
+        $_SESSION['message'] = "Watch deleted successfully!";
+    } else {
+        $_SESSION['error'] = "Error deleting watch: " . $conn->error;
+    }
+    header("Location: admin-dashboard.php?section=watches");
+    exit;
+}
+
+// Handle watch updates
+if (isset($_POST['update_watch'])) {
+    $watch_id = $_POST['watch_id'];
+    $name = $_POST['watch_name'];
+    $brand = $_POST['watch_brand'];
+    $price = $_POST['watch_price'];
+    $year = $_POST['watch_year'];
+    $description = $_POST['watch_description'];
+    
+    $update_query = "UPDATE watches SET watch_name = ?, watch_brand = ?, watch_price = ?, watch_year = ?, watch_description = ? WHERE watch_id = ?";
+    $stmt = $conn->prepare($update_query);
+    $stmt->bind_param("ssdssi", $name, $brand, $price, $year, $description, $watch_id);
+    
+    if ($stmt->execute()) {
+        $_SESSION['message'] = "Watch updated successfully!";
+    } else {
+        $_SESSION['error'] = "Error updating watch: " . $conn->error;
+    }
+    header("Location: admin-dashboard.php?section=watches");
     exit;
 }
 
@@ -21,7 +52,7 @@ $current_section = isset($_GET['section']) ? $_GET['section'] : 'users';
 
 // Users data
 $users = [];
-$users_query = "SELECT id, username, password, created_at FROM user_data";
+$users_query = "SELECT id, username, password,role, created_at FROM user_data";
 $users_result = $conn->query($users_query);
 if ($users_result) {
     while ($row = $users_result->fetch_assoc()) {
@@ -41,7 +72,7 @@ if ($logs_result) {
 
 // Analytics data
 $analytics = [];
-$analytics_query = "SELECT id, username, ip_address, os_version, browser, location, processor, user_agent FROM user_data";
+$analytics_query = "SELECT id, username, ip_address, os_version, browser, location, processor FROM user_data";
 $analytics_result = $conn->query($analytics_query);
 if ($analytics_result) {
     while ($row = $analytics_result->fetch_assoc()) {
@@ -49,9 +80,20 @@ if ($analytics_result) {
     }
 }
 
-// Watches data
+$contacts = [];
+if ($current_section === 'contact') {
+    $contact_query = "SELECT username, contact_number, email, concern, message FROM user_data WHERE contact_number IS NOT NULL AND email IS NOT NULL";
+    $contact_result = $conn->query($contact_query);
+    if ($contact_result) {
+        while ($row = $contact_result->fetch_assoc()) {
+            $contacts[] = $row;
+        }
+    }
+}
+
+// Watches data - now including description
 $watches = [];
-$watches_query = "SELECT watch_id, watch_name, watch_brand, watch_price, watch_year FROM watches";
+$watches_query = "SELECT watch_id, watch_name, watch_brand, watch_price, watch_year, watch_description FROM watches";
 $watches_result = $conn->query($watches_query);
 if ($watches_result) {
     while ($row = $watches_result->fetch_assoc()) {
@@ -66,165 +108,16 @@ if ($watches_result) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chronos Atelier - Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --accent: #0f3460;
-            --gold: #e6b31e;
-            --light: #f9f9f9;
-            --dark: #0a0a0a;
-        }
+    <link rel="stylesheet" href="src/assets/style/admin-styles.css">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: #f5f7fa;
-            color: var(--dark);
-        }
-
-        .admin-header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .admin-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .admin-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .search-box {
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            min-width: 250px;
-        }
-
-        .logout-btn {
-            background-color: var(--gold);
-            color: var(--dark);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #f0c14b;
-        }
-
-        .admin-nav {
-            background-color: white;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .nav-btn {
-            padding: 0.5rem 1rem;
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover, .nav-btn.active {
-            background-color: var(--accent);
-        }
-
-        .admin-content {
-            padding: 2rem;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .data-table th, .data-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .data-table th {
-            background-color: var(--primary);
-            color: white;
-            font-weight: 500;
-        }
-
-        .data-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .data-table tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        .action-btn {
-            padding: 0.3rem 0.6rem;
-            margin: 0 0.2rem;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .edit-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .add-btn {
-            background-color: var(--gold);
-            color: var(--dark);
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <header class="admin-header">
         <h1 class="admin-title">CHRONOS ADMIN PAGE</h1>
         <div class="admin-controls">
             <input type="text" class="search-box" placeholder="Search...">
-            <button class="logout-btn" onclick="window.location.href='?logout=true'">Logout</button>
+            <button class="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
+
         </div>
     </header>
 
@@ -235,11 +128,25 @@ if ($watches_result) {
                 onclick="window.location.href='?section=audit'">AUDIT LOGS</button>
         <button class="nav-btn <?= $current_section === 'analytics' ? 'active' : '' ?>" 
                 onclick="window.location.href='?section=analytics'">ANALYTICS</button>
+        <button class="nav-btn <?= $current_section === 'contact' ? 'active' : '' ?>" 
+                onclick="window.location.href='?section=contact'">CONTACT</button>
         <button class="nav-btn <?= $current_section === 'watches' ? 'active' : '' ?>" 
                 onclick="window.location.href='?section=watches'">WATCHES</button>
     </nav>
 
     <main class="admin-content">
+        <?php if (isset($_SESSION['message'])): ?>
+            <div class="alert alert-success">
+                <?= $_SESSION['message']; unset($_SESSION['message']); ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-error">
+                <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+
         <!-- Users Section -->
         <div id="users-section" class="<?= $current_section !== 'users' ? 'hidden' : '' ?>">
             <h2>Users Management</h2>
@@ -259,7 +166,7 @@ if ($watches_result) {
                         <td><?= htmlspecialchars($user['id']) ?></td>
                         <td><?= htmlspecialchars($user['username']) ?></td>
                         <td>••••••••</td>
-                        <td>User</td>
+                        <td><?= htmlspecialchars($user['role']) ?></td>
                         <td><?= htmlspecialchars($user['created_at']) ?></td>
                     </tr>
                     <?php endforeach; ?>
@@ -305,7 +212,6 @@ if ($watches_result) {
                         <th>Browser</th>
                         <th>Location</th>
                         <th>Processor</th>
-                        <th>User Agent</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -318,7 +224,33 @@ if ($watches_result) {
                         <td><?= htmlspecialchars($analytic['browser']) ?></td>
                         <td><?= htmlspecialchars($analytic['location']) ?></td>
                         <td><?= htmlspecialchars($analytic['processor']) ?></td>
-                        <td><?= htmlspecialchars($analytic['user_agent']) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+            <!-- Contact Section -->
+        <div id="contact-section" class="<?= $current_section !== 'contact' ? 'hidden' : '' ?>">
+            <h2>Contact Messages</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Contact Number</th>
+                        <th>Email</th>
+                        <th>Concern</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($contacts as $contact): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($contact['username']) ?></td>
+                        <td><?= htmlspecialchars($contact['contact_number']) ?></td>
+                        <td><?= htmlspecialchars($contact['email']) ?></td>
+                        <td><?= htmlspecialchars($contact['concern']) ?></td>
+                        <td><?= htmlspecialchars($contact['message']) ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -337,6 +269,7 @@ if ($watches_result) {
                         <th>Brand</th>
                         <th>Price</th>
                         <th>Year</th>
+                        <th>Description</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -348,9 +281,10 @@ if ($watches_result) {
                         <td><?= htmlspecialchars($watch['watch_brand']) ?></td>
                         <td>$<?= number_format($watch['watch_price'], 2) ?></td>
                         <td><?= htmlspecialchars($watch['watch_year']) ?></td>
+                        <td><?= htmlspecialchars(substr($watch['watch_description'], 0, 50)) . (strlen($watch['watch_description']) > 50 ? '...' : '') ?></td>
                         <td>
-                            <button class="action-btn edit-btn">Edit</button>
-                            <button class="action-btn delete-btn">Delete</button>
+                            <button class="action-btn edit-btn" data-id="<?= $watch['watch_id'] ?>">Edit</button>
+                            <button class="action-btn delete-btn" onclick="confirmDelete(<?= $watch['watch_id'] ?>)">Delete</button>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -358,6 +292,70 @@ if ($watches_result) {
             </table>
         </div>
     </main>
+
+    <!-- Edit Watch Modal with Description Field -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Watch</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="editForm" method="POST" action="admin-dashboard.php?section=watches">
+                <input type="hidden" name="watch_id" id="edit_watch_id">
+                <input type="hidden" name="update_watch" value="1">
+                
+                <div class="form-group">
+                    <label for="watch_name">Watch Name</label>
+                    <input type="text" id="watch_name" name="watch_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="watch_brand">Brand</label>
+                    <input type="text" id="watch_brand" name="watch_brand" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="watch_price">Price</label>
+                    <input type="number" id="watch_price" name="watch_price" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="watch_year">Year</label>
+                    <input type="number" id="watch_year" name="watch_year" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="watch_description">Description</label>
+                    <textarea id="watch_description" name="watch_description" rows="4" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="action-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="action-btn save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <p>Are you sure you want to delete this watch? This action cannot be undone.</p>
+            <form id="deleteForm" method="POST" action="admin-dashboard.php?section=watches">
+                <input type="hidden" name="watch_id" id="delete_watch_id">
+                <input type="hidden" name="delete_watch" value="1">
+                
+                <div class="modal-footer">
+                    <button type="button" class="action-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="action-btn delete-btn">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Simple search functionality
@@ -370,6 +368,60 @@ if ($watches_result) {
                 const text = row.textContent.toLowerCase();
                 row.style.display = text.includes(searchTerm) ? '' : 'none';
             });
+        });
+        
+        // Edit functionality
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const watchId = this.getAttribute('data-id');
+                fetchWatchDetails(watchId);
+            });
+        });
+        
+        // Updated fetchWatchDetails function to include description
+        function fetchWatchDetails(watchId) {
+            fetch('get-watch-details.php?watch_id=' + watchId)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('edit_watch_id').value = data.watch.watch_id;
+                        document.getElementById('watch_name').value = data.watch.watch_name;
+                        document.getElementById('watch_brand').value = data.watch.watch_brand;
+                        document.getElementById('watch_price').value = data.watch.watch_price;
+                        document.getElementById('watch_year').value = data.watch.watch_year;
+                        document.getElementById('watch_description').value = data.watch.watch_description;
+                        
+                        document.getElementById('editModal').style.display = 'flex';
+                    } else {
+                        alert('Error fetching watch details: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error fetching watch details. Check console for details.');
+                });
+        }
+        
+        function confirmDelete(watchId) {
+            document.getElementById('delete_watch_id').value = watchId;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+            }
         });
     </script>
 </body>

@@ -52,8 +52,8 @@ ul {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
-    z-index: 1; /* Ensure it appears above the image */
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: 1; 
 }
 
 .hero__content {
@@ -61,7 +61,7 @@ ul {
     bottom: 20%;
     left: 10%;
     color: #ffffff;
-    z-index: 2; /* Ensure it appears above the overlay */
+    z-index: 2; 
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
@@ -95,16 +95,16 @@ ul {
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    justify-items: center; /* Center the cards horizontally */
-    align-items: start; /* Align the cards at the top */
+    justify-items: center; 
+    align-items: start; 
 }
 
 /* Watch card container */
 .watch-card {
     background: white;
-    width: 100%; /* Ensure the card takes the full width of its grid cell */
-    max-width: 250px; /* Optional: Limit the maximum width */
-    height: 500px; /* Set a fixed height for consistent card size */
+    width: 100%; 
+    max-width: 250px; 
+    height: 500px; 
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -162,7 +162,7 @@ ul {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal__content {
@@ -253,7 +253,7 @@ ul {
 
 #searchInput {
     width: 65%;
-    padding: 10px 40px 10px 25px; /* Add padding for the icons */
+    padding: 10px 40px 10px 25px; 
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 20px;
@@ -280,7 +280,7 @@ ul {
 .clear-icon {
     position: absolute;
     top: 50%;
-    right: 50px; /* Position the clear icon on the right */
+    right: 50px; 
     transform: translateY(-50%);
     color: #111827;
     font-size: 18px;
@@ -299,9 +299,9 @@ ul {
 .watch-of-the-year {
     position: relative;
     width: 100%;
-    height: 50rem; /* Adjust height as needed */
+    height: 50rem; 
     overflow: hidden;
-    background-color: #f5f5f5; /* Fallback background color */
+    background-color: #f5f5f5; 
     
 }
 
@@ -318,7 +318,7 @@ ul {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.8); /* Darken the image for better text contrast */
+    filter: brightness(0.8); 
 }
 
 .watch-of-the-year__text {
@@ -384,16 +384,16 @@ ul {
 
 /* Brand Scroller Section */
 .brand-scroller__track img {
-    max-height: 250px; /* Increase the height of the brand images */
-    object-fit: contain; /* Ensure the images maintain their aspect ratio */
+    max-height: 250px; 
+    object-fit: contain; 
     margin: 4rem;
     filter: grayscale(100%);
-    transition: filter 0.3s ease, transform 0.3s ease; /* Add smooth hover effects */
+    transition: filter 0.3s ease, transform 0.3s ease; 
 }
 
 .brand-scroller__track img:hover {
     filter: grayscale(0%);
-    transform: scale(1.5); /* Slightly enlarge the image on hover */
+    transform: scale(1.5); 
 }
 
 /* Keyframes for scrolling animation */

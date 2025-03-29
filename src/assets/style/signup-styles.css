@@ -145,6 +145,18 @@ body {
   border: 1px solid rgba(231, 76, 60, 0.3);
 }
 
+.signup-link .link {
+  color: #e6b31e;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-link .link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+
 /* Validation Messages */
 .error {
   padding-top: 1em;

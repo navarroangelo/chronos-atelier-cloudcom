@@ -7,7 +7,7 @@
         document.getElementById('modalDescription').textContent = description;
 
 
-        // Display the modal
+
         document.getElementById('watchModal').style.display = 'block';
     }
 
@@ -15,7 +15,7 @@
         document.getElementById('watchModal').style.display = 'none';
     }
 
-    // Close the modal if the user clicks outside of it
+
     window.onclick = function(event) {
         if (event.target === document.getElementById('watchModal')) {
             closeModal();
@@ -32,19 +32,19 @@
             const watchBrand = card.querySelector('.watch-card__brand').textContent.toLowerCase();
     
             if (watchName.includes(input) || watchBrand.includes(input)) {
-                card.style.display = 'block'; // Show the card if it matches the search
+                card.style.display = 'block'; 
             } else {
-                card.style.display = 'none'; // Hide the card if it doesn't match
+                card.style.display = 'none'; 
             }
         });
     }
     
     function clearSearch() {
         const watchCards = document.querySelectorAll('.watch-card');
-        document.getElementById('searchInput').value = ''; // Clear the input field
+        document.getElementById('searchInput').value = ''; 
     
         watchCards.forEach(card => {
-            card.style.display = 'block'; // Show all cards
+            card.style.display = 'block'; 
         });
     }
 
@@ -57,3 +57,7 @@ brandTrack.addEventListener('mouseover', () => {
 brandTrack.addEventListener('mouseout', () => {
     brandTrack.style.animationPlayState = 'running';
 });
+
+
+
+

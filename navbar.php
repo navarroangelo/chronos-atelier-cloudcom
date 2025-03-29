@@ -20,25 +20,34 @@
 
         <!-- Right Links -->
         <div class="navbar__right">
-            <a href="account.php">Account ▼</a>
+            <div class="dropdown">
+                <button class="dropdown__button">Account ▼</button>
+                <div class="dropdown__menu">
+                    <h3 class="dropdown__title">Chronos Atelier</h2>
+                    <?php if (isset($_SESSION['username'])): ?>
+                        <p class="dropdown__greeting">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+                    <?php endif; ?>
+                    <a href="logout.php">Logout</a>
+                </div>
+            </div>
         </div>
     </div>
+    </div>
 </header>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
     const logo = document.getElementById("navbar-logo");
     const originalLogo = "src/assets/images/LOGONOBG.webp";
     const newLogo = "src/assets/images/CA-LETTER_LOGO.webp";
 
     window.addEventListener("scroll", function () {
-        const scrollThreshold = 200; // Adjust this value to trigger the change earlier
+        const scrollThreshold = 200; 
         const bottomPosition = document.body.offsetHeight - window.innerHeight - scrollThreshold;
 
         if (window.scrollY >= bottomPosition) {
-            logo.src = newLogo; // Change to new logo when near the bottom
+            logo.src = newLogo; 
         } else {
-            logo.src = originalLogo; // Revert to original logo
+            logo.src = originalLogo; 
         }
     });
 });
