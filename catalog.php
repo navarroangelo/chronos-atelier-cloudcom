@@ -22,11 +22,11 @@ if (!isset($_SESSION["username"])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-        <!-- Navbar Include-->
+
     <?php include 'navbar.php'; ?>
 
     <section class="hero">
-    <div class="hero__overlay"></div> 
+    <div class="hero__overlay"></div> <!-- Overlay -->
     <video autoplay muted loop class="hero__video">
         <source src="src/assets/images/catalog-vid.mp4" type="video/mp4">
         Your browser does not support the video tag.
@@ -75,44 +75,56 @@ if (!isset($_SESSION["username"])) {
         <div class="catalogue__search">
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search by name or brand...">
-            <i class="fas fa-search search-icon" onclick="filterWatches()"></i> 
-            <i class="fas fa-times clear-icon" onclick="clearSearch()"></i>
+            <i class="fas fa-search search-icon" onclick="filterWatches()"></i> <!-- Search icon -->
+            <i class="fas fa-times clear-icon" onclick="clearSearch()"></i> <!-- Clear icon -->
         </div>
     </div>
         <div class="catalogue__grid">
-            <?php
-            // Fetch data from the database
-            $sql = "SELECT watch_name, watch_brand, watch_price, watch_year, watch_description, watch_image FROM watches";
-            $result = $conn->query($sql);
+        <?php
+        // Fetch data from the database
+        $sql = "SELECT watch_name, watch_brand, watch_price, watch_year, watch_description, watch_image FROM watches";
+        $result = $conn->query($sql);
 
-            if ($result->num_rows > 0) {
-              
-                while ($row = $result->fetch_assoc()) {
-                    echo '
-                    <div class="watch-card" data-name="' . $row["watch_name"] . '">
-                        <img src="' . $row["watch_image"] . '" alt="' . $row["watch_name"] . '">
-                        <div class="watch-card__info">
-                            <h3>' . $row["watch_name"] . '</h3>
-                            <p class="watch-card__brand">Brand: ' . $row["watch_brand"] . '</p>
-                            <p class="watch-card__price">₱' . number_format($row["watch_price"], 2) . '</p>
-                            <p class="watch-card__year">Year: ' . $row["watch_year"] . '</p>
-                            <button class="watch-card__btn" onclick="openModal(
-                                \'' . $row["watch_name"] . '\',
-                                \'' . $row["watch_image"] . '\',
-                                \'' . $row["watch_price"] . '\',
-                                \'' . $row["watch_description"] . '\'
-                            )">View Details</button>
-                        </div>
-                    </div>';
+        if ($result->num_rows > 0) {
+            // Loop through the results and display each watch
+            while ($row = $result->fetch_assoc()) {
+                // Check if the image is a file path or binary data
+                $imageSrc = '';
+                if (strpos($row["watch_image"], 'src/') === 0) {
+                    // Local image path
+                    $imageSrc = $row["watch_image"];
+                } else {
+                    // Binary image data
+                    $imageSrc = 'data:image/jpeg;base64,' . base64_encode($row["watch_image"]);
                 }
-            } else {
-                echo "<p>No watches found in the database.</p>";
-            }
 
-          
-            $conn->close();
-            ?>
-        </div>
+                echo '
+                <div class="watch-card" data-name="' . htmlspecialchars($row["watch_name"]) . '">
+                    <img src="' . $imageSrc . '" alt="' . htmlspecialchars($row["watch_name"]) . '">
+                    <div class="watch-card__info">
+                        <h3>' . htmlspecialchars($row["watch_name"]) . '</h3>
+                        <p class="watch-card__brand">Brand: ' . htmlspecialchars($row["watch_brand"]) . '</p>
+                        <p class="watch-card__price">₱' . number_format($row["watch_price"], 2) . '</p>
+                        <p class="watch-card__year">Year: ' . htmlspecialchars($row["watch_year"]) . '</p>
+                        <button class="watch-card__btn" onclick="openModal(
+                            \'' . addslashes($row["watch_name"]) . '\',
+                            \'' . addslashes($imageSrc) . '\',
+                            \'' . addslashes($row["watch_price"]) . '\',
+                            \'' . addslashes($row["watch_description"]) . '\',
+                            \'' . addslashes($row["watch_brand"]) . '\',
+                            \'' . addslashes($row["watch_year"]) . '\'
+                        )">View Details</button>
+                    </div>
+                </div>';
+            }
+        } else {
+            echo '<div class="no-results">No watches found in the database.</div>';
+        }
+
+        // Close the database connection
+        $conn->close();
+        ?>
+    </div>
     </section>
     
     <div id="watchModal" class="modal">
@@ -148,7 +160,6 @@ if (!isset($_SESSION["username"])) {
 </section>
 
     <script src="scripts/script.js"></script>
-    <!-- Footer Include -->
     <?php include 'footer.php'; ?>
 
 </body>

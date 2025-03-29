@@ -1,21 +1,20 @@
     function openModal(name, image, price, description, brand, year) {
-        document.getElementById('modalTitle').textContent = name;
+        document.getElementById('modalTitle').textContent = `Name: ${name}`;
         document.getElementById('modalImage').src = image;
         document.getElementById('modalPrice').textContent = `Price: ₱${parseFloat(price).toLocaleString()}`;
-        document.getElementById('modalBrand').textContent = `Brand: ${brand}`;
-        document.getElementById('modalYear').textContent = `Year: ${year}`;
-        document.getElementById('modalDescription').textContent = description;
+        document.getElementById('modalDescription').textContent = `Description: ${description}`;
+        document.getElementById('modalBrand').textContent = `Brand: ${brand || 'N/A'}`;
+        document.getElementById('modalYear').textContent = `Year: ${year || 'N/A'}`;
 
-
-
-        document.getElementById('watchModal').style.display = 'block';
-    }
+    // Display the modal
+    document.getElementById('watchModal').style.display = 'block';
+}
 
     function closeModal() {
         document.getElementById('watchModal').style.display = 'none';
     }
 
-
+    // Close the modal if the user clicks outside of it
     window.onclick = function(event) {
         if (event.target === document.getElementById('watchModal')) {
             closeModal();
@@ -32,19 +31,19 @@
             const watchBrand = card.querySelector('.watch-card__brand').textContent.toLowerCase();
     
             if (watchName.includes(input) || watchBrand.includes(input)) {
-                card.style.display = 'block'; 
+                card.style.display = 'block'; // Show the card if it matches the search
             } else {
-                card.style.display = 'none'; 
+                card.style.display = 'none'; // Hide the card if it doesn't match
             }
         });
     }
     
     function clearSearch() {
         const watchCards = document.querySelectorAll('.watch-card');
-        document.getElementById('searchInput').value = ''; 
+        document.getElementById('searchInput').value = ''; // Clear the input field
     
         watchCards.forEach(card => {
-            card.style.display = 'block'; 
+            card.style.display = 'block'; // Show all cards
         });
     }
 
@@ -57,7 +56,3 @@ brandTrack.addEventListener('mouseover', () => {
 brandTrack.addEventListener('mouseout', () => {
     brandTrack.style.animationPlayState = 'running';
 });
-
-
-
-
