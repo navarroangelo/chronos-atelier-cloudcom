@@ -12,7 +12,7 @@ body {
   align-items: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+  background: linear-gradient(-45deg, #111827, #111827,#0d1a2d, #0f3460);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
 }
@@ -128,6 +128,35 @@ body {
   text-decoration: underline;
 }
 
+
+/* Invalid Admin Access Styles */
+.invalid-access {
+  margin-bottom: 1.5rem;
+}
+
+.invalid-access h1 {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 2rem;
+  margin: 0;
+  line-height: 1;
+  color: rgb(255, 0, 0);
+  letter-spacing: 1px;
+}
+
+.invalid-access h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin: 0.5rem 0 0 0;
+  color: #f2f2f2;
+}
+
+.login-container .invalid-access p {
+  font-weight: 300;
+  margin: 1rem 0 2rem 0;
+  opacity: 0.9;
+}
 
 /* Message Styles */
 .message {
