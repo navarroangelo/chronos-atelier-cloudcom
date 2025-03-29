@@ -136,6 +136,7 @@ if ($watches_result) {
         <h1 class="admin-title">CHRONOS ADMIN PAGE</h1>
         <div class="admin-controls">
             <input type="text" class="search-box" placeholder="Search...">
+            <button class="home-btn" onclick="window.location.href='index.php'">Visit Website</button>
             <button class="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
 
         </div>
