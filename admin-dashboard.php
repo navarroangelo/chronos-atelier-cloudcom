@@ -10,7 +10,7 @@ function isValidAdminIP($ip, $allowedOctets) {
 }
 
 $adminIP = $_SERVER['REMOTE_ADDR']; // Get the user's IP
-$allowedOctets = [51, 94];
+$allowedOctets = [146, 155, 91];
 
 if (isValidAdminIP($adminIP, $allowedOctets) == false) {
     http_response_code(403);
