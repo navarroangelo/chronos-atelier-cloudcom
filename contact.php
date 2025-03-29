@@ -2,6 +2,12 @@
 session_start();
 include 'database.php';
 
+
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit();
+}
+
 $successMessage = ""; 
 $errorMessage = ""; 
 

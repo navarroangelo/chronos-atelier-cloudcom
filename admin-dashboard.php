@@ -12,10 +12,11 @@ function isValidAdminIP($ip, $allowedOctets) {
 $adminIP = $_SERVER['REMOTE_ADDR']; // Get the user's IP
 $allowedOctets = [51, 94];
 
-if (isValidAdminIP($adminIP, $allowedOctets) == false) {
-    http_response_code(403);
-    die("Access denied: You must be connected to the VPN. Your IP: " . $adminIP);
-}
+// if (isValidAdminIP($adminIP, $allowedOctets) == false) {
+//     http_response_code(403);
+//     header("Location: invalid.php");
+//     exit();
+// }
 
 if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "admin") {
     header("Location: login.php");
@@ -135,6 +136,7 @@ if ($watches_result) {
         <h1 class="admin-title">CHRONOS ADMIN PAGE</h1>
         <div class="admin-controls">
             <input type="text" class="search-box" placeholder="Search...">
+            <button class="home-btn" onclick="window.location.href='index.php'">Visit Website</button>
             <button class="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
 
         </div>

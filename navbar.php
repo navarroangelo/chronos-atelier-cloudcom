@@ -26,6 +26,9 @@
                     <h3 class="dropdown__title">Chronos Atelier</h2>
                     <?php if (isset($_SESSION['username'])): ?>
                         <p class="dropdown__greeting">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                                 <a href="admin-dashboard.php">Admin Dashboard</a>
+                         <?php endif; ?>
                     <?php endif; ?>
                     <a href="logout.php">Logout</a>
                 </div>
