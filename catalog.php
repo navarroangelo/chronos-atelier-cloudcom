@@ -1,5 +1,13 @@
 <?php
 include 'database.php'; 
+
+
+session_start(); 
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -14,11 +22,11 @@ include 'database.php';
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-
+        <!-- Navbar Include-->
     <?php include 'navbar.php'; ?>
 
     <section class="hero">
-    <div class="hero__overlay"></div> <!-- Overlay -->
+    <div class="hero__overlay"></div> 
     <video autoplay muted loop class="hero__video">
         <source src="src/assets/images/catalog-vid.mp4" type="video/mp4">
         Your browser does not support the video tag.
@@ -67,8 +75,8 @@ include 'database.php';
         <div class="catalogue__search">
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search by name or brand...">
-            <i class="fas fa-search search-icon" onclick="filterWatches()"></i> <!-- Search icon -->
-            <i class="fas fa-times clear-icon" onclick="clearSearch()"></i> <!-- Clear icon -->
+            <i class="fas fa-search search-icon" onclick="filterWatches()"></i> 
+            <i class="fas fa-times clear-icon" onclick="clearSearch()"></i>
         </div>
     </div>
         <div class="catalogue__grid">
@@ -78,7 +86,7 @@ include 'database.php';
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
-                // Loop through the results and display each watch
+              
                 while ($row = $result->fetch_assoc()) {
                     echo '
                     <div class="watch-card" data-name="' . $row["watch_name"] . '">
@@ -101,7 +109,7 @@ include 'database.php';
                 echo "<p>No watches found in the database.</p>";
             }
 
-            // Close the database connection
+          
             $conn->close();
             ?>
         </div>
@@ -140,6 +148,7 @@ include 'database.php';
 </section>
 
     <script src="scripts/script.js"></script>
+    <!-- Footer Include -->
     <?php include 'footer.php'; ?>
 
 </body>

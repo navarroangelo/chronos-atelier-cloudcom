@@ -117,6 +117,18 @@ body {
   box-shadow: 0 5px 15px rgba(230, 179, 30, 0.3);
 }
 
+.signup-link .link {
+  color: #e6b31e;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-link .link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+
 /* Message Styles */
 .message {
   width: 90%;
@@ -125,11 +137,11 @@ body {
   margin-top: 1rem;
   text-align: center;
   font-size: 0.9rem;
-  display: none; /* Hidden by default */
+  display: none; 
 }
 
 .message.active {
-  display: block; /* Only show when active */
+  display: block;
 }
 
 .message.success {
@@ -139,12 +151,23 @@ body {
 }
 
 .message.error {
-  background-color: rgba(231, 76, 60, 0.2);
-  color: #e74c3c;
-  border: 1px solid rgba(231, 76, 60, 0.3);
-  width: 95%;
+  color: #ff0000; 
+  font-weight: bold;
+  margin-top: 10px;
 }
 
+.message.success {
+  color: #28a745; 
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  text-align: left;
+}
 /* Responsive Adjustments */
 @media (max-width: 480px) {
   .login-container {

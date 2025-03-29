@@ -77,3 +77,73 @@
 .navbar__right a:hover {
     color: #777;
 }
+
+/* Dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown button */
+.dropdown__button {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+    outline: none;
+}
+
+/* Dropdown menu */
+.dropdown__menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0; 
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 1000;
+    min-width: 250px;
+    overflow: hidden;
+}
+
+/* Dropdown menu links */
+.dropdown__menu a {
+    display: block;
+    padding: 10px 15px;
+    color: #111827;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown__menu a:hover {
+    background-color: #f5f5f5;
+}
+
+/* Show dropdown menu on hover */
+.dropdown:hover .dropdown__menu {
+    display: block;
+}
+
+.dropdown__title {
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #111827;
+    padding: 10px 15px;
+    font-family: 'Cinzel', serif;
+}
+
+/* Dropdown greeting */
+.dropdown__greeting {
+    padding: 10px 15px;
+    color: #111827;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: capitalize;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+}

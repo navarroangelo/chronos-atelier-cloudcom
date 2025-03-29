@@ -1,6 +1,13 @@
 <?php
-// catalog.php
+session_start(); 
+
+
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,11 +24,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;600&family=Figtree:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php include 'navbar.php'; ?> <!-- Include the navbar -->
+    <!-- Navbar Include-->
+    <?php include 'navbar.php'; ?> 
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero__overlay"></div> <!-- Overlay -->
+        <div class="hero__overlay"></div> 
         <img src="src/assets/images/ABOUT-HEROIMAGE.webp" alt="Hero Watch" class="hero__image">
         <div class="hero__content">
             <h1>About Us</h1>
@@ -53,14 +61,14 @@
             <h2>Our Blueprint for Timeless Excellence</h2>
             <div class="mission-vision-content">
                 <div class="mission">
-                    <i class="fas fa-bullseye"></i> <!-- Mission Icon -->
+                    <i class="fas fa-bullseye"></i> 
                     <h3>Our Mission</h3>
                     <p>
                         At Chronos Atelier, our mission is to bring the finest selection of luxury watches to collectors and enthusiasts worldwide. We are dedicated to providing authenticity, quality craftsmanship, and unparalleled customer service, ensuring that every timepiece tells a story of excellence.
                     </p>
                 </div>
                 <div class="vision">
-                    <i class="fas fa-eye"></i> <!-- Vision Icon -->
+                    <i class="fas fa-eye"></i> 
                     <h3>Our Vision</h3>
                     <p>
                         We envision a world where luxury watches are more than just accessories—they are symbols of passion, heritage, and prestige. Chronos Atelier aims to be the premier destination for watch lovers, connecting people with timepieces that resonate with their unique style and values.
@@ -103,7 +111,7 @@
             </div>
         </div>
     </section>
-
-    <?php include 'footer.php'; ?> <!-- Include the footer -->
+    <!-- Footer Include -->
+    <?php include 'footer.php'; ?> 
 </body>
 </html>
