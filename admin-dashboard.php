@@ -186,7 +186,7 @@ if ($watches_result) {
                     <tr>
                         <td><?= htmlspecialchars($user['id']) ?></td>
                         <td><?= htmlspecialchars($user['username']) ?></td>
-                        <td><?= htmlspecialchars($user['password'])?></td>
+                        <td><?= htmlspecialchars(substr($user['password'], 0, 15)) . (strlen($user['password']) > 15 ? '...' : '') ?></td>
                         <td><?= htmlspecialchars($user['role']) ?></td>
                         <td><?= htmlspecialchars($user['created_at']) ?></td>
                     </tr>
