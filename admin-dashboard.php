@@ -172,7 +172,24 @@ if ($watches_result) {
         <!-- Users Section -->
         <div id="users-section" class="<?= $current_section !== 'users' ? 'hidden' : '' ?>">
             <h2>Users Management</h2>
-            <table class="data-table">
+            <div class="filter-container">
+                <label for="users-filter">Sort By:</label>
+                <select id="users-filter" class="search-box" onchange="sortTable('users-table', this.value)">
+                    <option value="ascending">Ascending (ID)</option>
+                    <option value="descending">Descending (ID)</option>
+                    <option value="alphabetical">Alphabetical (Username)</option>
+                </select>
+                <label for="users-column-filter">Filter By:</label>
+                <select id="users-column-filter" class="search-box" onchange="filterTable('users-table', this.value, 'users-column-input')">
+                    <option value="0">UserID</option>
+                    <option value="1">Username</option>
+                    <option value="2">Password</option>
+                    <option value="3">Role</option>
+                    <option value="4">Created At</option>
+                </select>
+                <input type="text" id="users-column-input" class="search-box"  placeholder="Filter value..." oninput="filterTable('users-table', document.getElementById('users-column-filter').value, 'users-column-input')">
+            </div>
+            <table id="users-table" class="data-table">
                 <thead>
                     <tr>
                         <th>UserID</th>
@@ -199,7 +216,23 @@ if ($watches_result) {
         <!-- Audit Logs Section -->
         <div id="audit-section" class="<?= $current_section !== 'audit' ? 'hidden' : '' ?>">
             <h2>Audit Logs</h2>
-            <table class="data-table">
+            <div class="filter-container">
+                <label for="audit-filter">Sort By:</label>
+                <select id="audit-filter" class="search-box" onchange="sortTable('audit-table', this.value)">
+                    <option value="ascending">Ascending (ID)</option>
+                    <option value="descending">Descending (ID)</option>
+                    <option value="alphabetical">Alphabetical (Username)</option>
+                </select>
+                <label for="audit-column-filter">Filter By:</label>
+                <select id="audit-column-filter" class="search-box" onchange="filterTable('audit-table', this.value, 'audit-column-input')">
+                    <option value="0">UserID</option>
+                    <option value="1">Username</option>
+                    <option value="2">Action</option>
+                    <option value="3">Timestamp</option>
+                </select>
+                <input type="text" id="audit-column-input" class="search-box" placeholder="Filter value..." oninput="filterTable('audit-table', document.getElementById('audit-column-filter').value, 'audit-column-input')">
+            </div>
+            <table id="audit-table" class="data-table">
                 <thead>
                     <tr>
                         <th>UserID</th>
@@ -224,7 +257,26 @@ if ($watches_result) {
         <!-- Analytics Section -->
         <div id="analytics-section" class="<?= $current_section !== 'analytics' ? 'hidden' : '' ?>">
             <h2>User Analytics</h2>
-            <table class="data-table">
+            <div class="filter-container">
+            <label for="analytics-filter">Sort By:</label>
+            <select id="analytics-filter" class="search-box" onchange="sortTable('analytics-table', this.value)">
+                <option value="ascending">Ascending (ID)</option>
+                <option value="descending">Descending (ID)</option>
+                <option value="alphabetical">Alphabetical (Username)</option>
+            </select>
+            <label for="analytics-column-filter">Filter By:</label>
+            <select id="analytics-column-filter" class="search-box"  onchange="filterTable('analytics-table', this.value, 'analytics-column-input')">
+                <option value="0">UserID</option>
+                <option value="1">Username</option>
+                <option value="2">IP Address</option>
+                <option value="3">OS</option>
+                <option value="4">Browser</option>
+                <option value="5">Location</option>
+                <option value="6">Processor</option>
+            </select>
+            <input type="text" id="analytics-column-input" class="search-box" placeholder="Filter value..." oninput="filterTable('analytics-table', document.getElementById('analytics-column-filter').value, 'analytics-column-input')">
+        </div>
+            <table id="analytics-table" class="data-table">
                 <thead>
                     <tr>
                         <th>UserID</th>
@@ -255,7 +307,18 @@ if ($watches_result) {
             <!-- Contact Section -->
         <div id="contact-section" class="<?= $current_section !== 'contact' ? 'hidden' : '' ?>">
             <h2>Contact Messages</h2>
-            <table class="data-table">
+            <div class="filter-container">
+                <label for="contact-column-filter">Filter By:</label>
+                <select id="contact-column-filter" class="search-box" onchange="filterContactTable(this.value, 'contact-column-input')">
+                    <option value="0">Username</option>
+                    <option value="1">Contact Number</option>
+                    <option value="2">Email</option>
+                    <option value="3">Concern</option>
+                    <option value="4">Message</option>
+                </select>
+                <input type="text" id="contact-column-input" class="search-box" placeholder="Filter value..." oninput="filterContactTable(document.getElementById('contact-column-filter').value, 'contact-column-input')">
+            </div>
+            <table id="contact-table" class="data-table">
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -283,7 +346,25 @@ if ($watches_result) {
         <div id="watches-section" class="<?= $current_section !== 'watches' ? 'hidden' : '' ?>">
             <h2>Watches Management</h2>
             <button class="add-btn" onclick="window.location.href='add-watch.php'">Add New Watch</button>
-            <table class="data-table">
+            <div class="filter-container">
+                <label for="watches-filter">Sort By:</label>
+                <select id="watches-filter" class="search-box" onchange="sortWatchesTable(this.value)">
+                    <option value="ascending">Ascending (Price)</option>
+                    <option value="descending">Descending (Price)</option>
+                    <option value="alphabetical">Alphabetical (Name)</option>
+                </select>
+                <label for="watches-column-filter">Filter By:</label>
+                <select id="watches-column-filter" class="search-box" onchange="filterWatchesTable(this.value, 'watches-column-input')">
+                    <option value="0">Watch ID</option>
+                    <option value="1">Name</option>
+                    <option value="2">Brand</option>
+                    <option value="3">Price</option>
+                    <option value="4">Year</option>
+                    <option value="5">Description</option>
+                </select>
+                <input type="text" id="watches-column-input" class="search-box" placeholder="Filter value..." oninput="filterWatchesTable(document.getElementById('watches-column-filter').value, 'watches-column-input')">
+            </div>
+            <table id="watches-table" class="data-table">
                 <thead>
                     <tr>
                         <th>Watch ID</th>
@@ -459,6 +540,105 @@ if ($watches_result) {
                 closeModal();
             }
         });
+
+        function sortTable(tableId, sortBy) {
+            const table = document.getElementById(tableId);
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+            rows.sort((a, b) => {
+                const getValue = (row, index) => row.children[index].textContent.trim().toLowerCase();
+
+                switch (sortBy) {
+                    case 'latest':
+                        // Sort by the last column (e.g., Created At or Timestamp)
+                        return new Date(getValue(b, 4)) - new Date(getValue(a, 4));
+                    case 'alphabetical':
+                        // Sort by the second column (e.g., Username)
+                        return getValue(a, 1).localeCompare(getValue(b, 1));
+                    case 'ascending':
+                        // Sort by the first column (e.g., ID)
+                        return parseInt(getValue(a, 0)) - parseInt(getValue(b, 0));
+                    case 'descending':
+                        // Sort by the first column (e.g., ID) in reverse
+                        return parseInt(getValue(b, 0)) - parseInt(getValue(a, 0));
+                    default:
+                        return 0;
+                }
+            });
+
+            // Reorder rows in the table
+            const tbody = table.querySelector('tbody');
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function filterTable(tableId, columnIndex, inputId) {
+        const table = document.getElementById(tableId);
+        const rows = table.querySelectorAll('tbody tr');
+        const filterValue = document.getElementById(inputId).value.toLowerCase();
+        
+
+            rows.forEach(row => {
+                const cellValue = row.children[columnIndex].textContent.trim().toLowerCase();
+                row.style.display = cellValue.includes(filterValue) ? '' : 'none';
+            });
+
+        }
+            // Sorting function specifically for the Watches table
+        function sortWatchesTable(sortBy) {
+            const table = document.getElementById('watches-table');
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+            rows.sort((a, b) => {
+                const getValue = (row, index) => row.children[index].textContent.trim();
+
+                switch (sortBy) {
+                    case 'alphabetical':
+                        // Sort by the second column (Name)
+                        return getValue(a, 1).localeCompare(getValue(b, 1));
+                    case 'ascending':
+                        // Sort by the fourth column (Price) in ascending order
+                        return parseFloat(getValue(a, 3).replace(/[^0-9.-]+/g, '')) - parseFloat(getValue(b, 3).replace(/[^0-9.-]+/g, ''));
+                    case 'descending':
+                        // Sort by the fourth column (Price) in descending order
+                        return parseFloat(getValue(b, 3).replace(/[^0-9.-]+/g, '')) - parseFloat(getValue(a, 3).replace(/[^0-9.-]+/g, ''));
+                    default:
+                        return 0;
+                }
+            });
+
+            // Reorder rows in the table
+            const tbody = table.querySelector('tbody');
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Filtering function specifically for the Watches table
+        function filterWatchesTable(columnIndex, inputId) {
+            const table = document.getElementById('watches-table');
+            const rows = table.querySelectorAll('tbody tr');
+            const filterValue = document.getElementById(inputId).value.toLowerCase();
+
+            rows.forEach(row => {
+                const cellValue = row.children[columnIndex].textContent.trim().toLowerCase();
+                row.style.display = cellValue.includes(filterValue) ? '' : 'none';
+            });
+        }
+
+
+                // Filtering function specifically for the Contact table
+                function filterContactTable(columnIndex, inputId) {
+                    const table = document.getElementById('contact-table');
+                    const rows = table.querySelectorAll('tbody tr');
+                    const filterValue = document.getElementById(inputId).value.toLowerCase();
+
+                    rows.forEach(row => {
+                        const cellValue = row.children[columnIndex].textContent.trim().toLowerCase();
+                        row.style.display = cellValue.includes(filterValue) ? '' : 'none';
+                    });
+                }
+
+
+
+
     </script>
 </body>
 </html>
