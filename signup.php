@@ -7,9 +7,6 @@ $username_error = "";
 $signup_success = false;
 $errors = [];
 
-
-
-
 if (isset($_GET['username_check'])) {
     $username = $_GET['username_check'];
     $stmt = $conn->prepare("SELECT * FROM user_data WHERE username = ?");
@@ -23,8 +20,7 @@ if (isset($_GET['username_check'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"]);
     $password = $_POST["password"];
-    
-   
+
     $stmt = $conn->prepare("SELECT * FROM user_data WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -33,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $username_error = "Username already exists. Please choose another.";
     }
-
 
     if (strlen($password) < 8) {
         $errors[] = "Password must be at least 8 characters long.";
@@ -49,20 +44,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($errors) && empty($username_error)) {
-    
-        list($ip_address, $os_version, $browser, $processor, $location ,$user_agent) = getUserDetails();
-        
+        list($ip_address, $os_version, $browser, $processor, $location, $user_agent) = getUserDetails();
+
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $stmt = $conn->prepare("INSERT INTO user_data (username, password, ip_address, os_version, browser, processor, location, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssss", $username, $hashed_password, $ip_address, $os_version, $browser, $processor, $location, $user_agent);
 
         if ($stmt->execute()) {
             $signup_success = true;
+
+            // Redirect to login page after successful signup
+            header("Location: login.php");
+            exit;
         } else {
             $errors[] = "Database error: " . $stmt->error;
         }
     }
-    
+
     $stmt->close();
     $conn->close();
 }
@@ -162,26 +160,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
 
+
+        
        
-        function getProcessorDetails() {
-            var canvas = document.createElement('canvas');
-            var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            
-            if (debugInfo) {
-                var renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                var vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-
-                return `${renderer}`;
-            } else {
-                return "Processor/Graphics info not available";
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var processorDetails = getProcessorDetails();
-            document.getElementById('processorInput').value = processorDetails;
-        });
     </script>
 
 </body>
