@@ -19,9 +19,22 @@ try {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
+        $watch = $result->fetch_assoc();
+
+        // Handle the watch_image field
+        if (!empty($watch['watch_image'])) {
+            if (strpos($watch['watch_image'], 'src/') === 0) {
+                // Local file path
+                $watch['watch_image'] = $watch['watch_image'];
+            } else {
+                // Binary image data (BLOB)
+                $watch['watch_image'] = 'data:image/jpeg;base64,' . base64_encode($watch['watch_image']);
+            }
+        }
+
         echo json_encode([
-            'success' => true, 
-            'watch' => $result->fetch_assoc()
+            'success' => true,
+            'watch' => $watch
         ]);
     } else {
         throw new Exception('Watch not found');

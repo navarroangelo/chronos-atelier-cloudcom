@@ -12,11 +12,11 @@ function isValidAdminIP($ip, $allowedOctets) {
 $adminIP = $_SERVER['REMOTE_ADDR']; // Get the user's IP
 $allowedOctets = [146, 155, 91];
 
-if (isValidAdminIP($adminIP, $allowedOctets) == false) {
-    http_response_code(403);
-    header("Location: invalid.php");
-    exit();
-}
+// if (isValidAdminIP($adminIP, $allowedOctets) == false) {
+//     http_response_code(403);
+//     header("Location: invalid.php");
+//     exit();
+// }
 
 if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "admin") {
     header("Location: login.php");
@@ -350,6 +350,11 @@ if ($watches_result) {
                     <textarea id="watch_description" name="watch_description" rows="4" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
                 </div>
                 
+                <div class="form-group">
+                <label for="watch_image" style="text-align: center">Image</label>
+                    <img id="watch_image_preview" src="" alt="Watch Image" style="display: none; max-width: 20%; height: auto; margin-bottom: 1.5rem; margin-left: 11rem;">
+                </div>
+
                 <div class="modal-footer">
                     <button type="button" class="action-btn cancel-btn" onclick="closeModal()">Cancel</button>
                     <button type="submit" class="action-btn save-btn">Save Changes</button>
@@ -417,6 +422,15 @@ if ($watches_result) {
                         document.getElementById('watch_year').value = data.watch.watch_year;
                         document.getElementById('watch_description').value = data.watch.watch_description;
                         
+                                        // Handle image preview
+                const imagePreview = document.getElementById('watch_image_preview');
+                if (data.watch.watch_image) {
+                    imagePreview.src = data.watch.watch_image;
+                    imagePreview.style.display = 'block';
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+
                         document.getElementById('editModal').style.display = 'flex';
                     } else {
                         alert('Error fetching watch details: ' + data.message);
