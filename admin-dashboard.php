@@ -12,6 +12,7 @@ function isValidAdminIP($ip, $allowedOctets) {
 $adminIP = $_SERVER['REMOTE_ADDR']; // Get the user's IP
 $allowedOctets = [146, 155, 91];
 
+// Check if the user's IP is valid
 if (isValidAdminIP($adminIP, $allowedOctets) == false) {
     http_response_code(403);
     header("Location: invalid.php");
